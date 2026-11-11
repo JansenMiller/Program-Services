@@ -150,6 +150,9 @@ test('role guards: caseworker', async () => {
   assert.equal((await c.req('POST', '/api/change-password', { body: { current: state.cw.tempPassword, next: NEWPW + '-cw' } })).status, 200);
   assert.equal((await c.req('GET', '/tools/certificates/')).status, 200);
   assert.equal((await c.req('GET', '/tools/certificates/certificate.js')).status, 200);
+  const bgSvg = await c.req('GET', '/tools/certificates/certificate-bg.svg');
+  assert.equal(bgSvg.status, 200);
+  assert.match(bgSvg.headers.get('content-type'), /image\/svg\+xml/);
   assert.equal((await c.req('GET', '/tools/chapel-calendar/')).status, 403);
   assert.equal((await c.req('GET', '/tools/nope/')).status, 403);
   assert.equal((await c.req('GET', '/admin/users.html')).status, 403);
@@ -167,6 +170,7 @@ test('role guards: chaplain', async () => {
   await c.req('POST', '/api/change-password', { body: { current: state.ch.tempPassword, next: NEWPW + '-ch' } });
   assert.equal((await c.req('GET', '/tools/chapel-calendar/')).status, 200);
   assert.equal((await c.req('GET', '/tools/certificates/')).status, 403);
+  assert.equal((await c.req('GET', '/tools/certificates/certificate-bg.svg')).status, 403);
   assert.equal((await c.req('GET', '/admin/users.html')).status, 403);
 });
 

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>Certificate of Completion &middot; ADOC Staff Portal</title>
+<title>Certificates of Completion &middot; ADOC Staff Portal</title>
 <link rel="stylesheet" href="/assets/brand.css">
 <link rel="stylesheet" href="/tools/certificates/certificate.css">
 </head>
@@ -13,63 +13,23 @@
 <main class="cert-page">
   <section class="panel form-panel">
     <p class="crumb"><a href="/">&larr; Portal home</a></p>
-    <h1>Certificate of Completion</h1>
-    <p class="sub">Fill in the details. The certificate updates as you type. Nothing you type here is saved or sent anywhere.</p>
+    <h1>Certificates of Completion</h1>
+    <p class="sub">Enter the class details once, paste the names, and print one certificate per person. Nothing you type here is saved or sent anywhere.</p>
     <form id="f" autocomplete="off">
-      <label for="name">Participant name</label>
-      <input id="name" placeholder="First Last">
-      <label for="ais">AIS number</label>
-      <input id="ais" placeholder="e.g. 000123456">
       <label for="program">Program / course</label>
-      <input id="program" placeholder="e.g. Thinking for a Change">
-      <div class="row">
-        <div><label for="date">Completion date</label><input id="date" type="date"></div>
-        <div><label for="hours">Hours (optional)</label><input id="hours" type="number" min="0" step="0.5" placeholder="e.g. 24"></div>
-      </div>
-      <label for="facility">Facility</label>
-      <input id="facility" list="facilities" placeholder="Start typing...">
-      <datalist id="facilities">
-        <option value="Bibb Correctional Facility"><option value="Bullock Correctional Facility">
-        <option value="Donaldson Correctional Facility"><option value="Easterling Correctional Facility">
-        <option value="Elmore Correctional Facility"><option value="Fountain Correctional Facility">
-        <option value="Hamilton Aged and Infirmed"><option value="Holman Correctional Facility">
-        <option value="Kilby Correctional Facility"><option value="Limestone Correctional Facility">
-        <option value="St. Clair Correctional Facility"><option value="Staton Correctional Facility">
-        <option value="Julia Tutwiler Prison for Women"><option value="Ventress Correctional Facility">
-      </datalist>
-      <label for="facilitator">Facilitator name</label>
-      <input id="facilitator" placeholder="Name">
-      <label for="title">Facilitator title</label>
-      <input id="title" placeholder="e.g. Social Service Caseworker">
-      <button id="print" class="block" type="button">PRINT / SAVE AS PDF</button>
+      <input id="program" maxlength="80" placeholder="e.g. Anger Management">
+      <label for="date">Date awarded</label>
+      <input id="date" type="date">
+      <label for="names">Names (one per line)</label>
+      <textarea id="names" rows="10" placeholder="First Middle Last&#10;First Middle Last"></textarea>
+      <label class="check"><input id="tidy" type="checkbox"> Tidy names: turn <b>LAST, FIRST</b> into <b>First Last</b> and fix ALL CAPS</label>
+      <div id="count" class="msg" role="status"></div>
+      <button id="print" class="block" type="button" disabled>PRINT / SAVE AS PDF</button>
       <button id="clear" class="block secondary" type="button">CLEAR FORM</button>
     </form>
-    <p class="hint">In the print window choose <b>Save as PDF</b> (or your printer), paper <b>Letter</b>, <b>Landscape</b>, margins <b>None</b>, and turn on <b>Background graphics</b>.</p>
+    <p class="hint">In the print window choose <b>Save as PDF</b> (or your printer), paper <b>Letter</b>, <b>Landscape</b>, margins <b>None</b>, and turn <b>Headers and footers</b> off. Check the preview for names that look wrong before you print.</p>
   </section>
-  <section class="stage">
-    <div class="scaler" id="scaler"><div class="cert-wrap" id="wrap">
-      <div class="cert" id="cert">
-        <div class="draft-flag">PLACEHOLDER LAYOUT &mdash; pending ADOC certificate template</div>
-        <div class="frame"></div><div class="frame2"></div>
-        <div class="inner">
-          <div class="logo"><svg class="adoc-logo" viewBox="0 0 182.9 25.13" role="img" aria-label="ADOC Program Services"><use href="/assets/logo.svg#adoc-wordmark-paths"></use></svg></div>
-          <div class="title">Certificate of Completion</div>
-          <div class="rule"></div>
-          <div class="lead">This certifies that</div>
-          <div class="name" id="o-name">&nbsp;</div>
-          <div class="ais" id="o-ais">&nbsp;</div>
-          <div class="body">has successfully completed the program</div>
-          <div class="program" id="o-program">&nbsp;</div>
-          <div class="meta" id="o-meta">&nbsp;</div>
-          <div class="sigs">
-            <div class="sig"><div class="line" id="o-fac">&nbsp;</div><div class="cap" id="o-fac-cap">Facilitator</div></div>
-            <div class="sig"><div class="line" id="o-date">&nbsp;</div><div class="cap">Date</div></div>
-          </div>
-          <div class="foot">Alabama Department of Corrections &middot; Program Services Division</div>
-        </div>
-      </div>
-    </div></div>
-  </section>
+  <section class="stage" id="stage" aria-label="Certificate preview"></section>
 </main>
 <script src="/assets/app.js"></script>
 <script src="/tools/certificates/certificate.js"></script>

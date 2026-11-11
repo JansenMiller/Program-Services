@@ -5,7 +5,7 @@ A small internal website for Program Services staff. Each person signs in with t
 | Role | Sees |
 |---|---|
 | Supervisor | Everything, plus **Manage Team** (add staff, reset passwords, turn accounts off) and the Shortcut Ideas inbox |
-| Social Service Caseworker | **Certificate of Completion** tool, Shortcut Ideas |
+| Social Service Caseworker | **Certificates of Completion** (paste a class roster, print one certificate per person), Shortcut Ideas |
 | Chaplain | **Chapel & Classroom Calendar** (placeholder for now), Shortcut Ideas |
 
 ## Run it on your computer
@@ -50,11 +50,11 @@ Pages must not use inline `<script>` blocks or inline event handlers. The conten
 - Headers: strict content security policy (no inline script), no framing, no-store, no-index, HSTS in production.
 - Audit log table records sign-ins, failures, lockouts and account changes (no passwords, no participant data).
 - Certificate details are typed into the browser and printed from it. They are not sent to the server.
+- The certificate artwork (`public/tools/certificates/certificate-bg.svg`) is the approved ADOC design, including the pre-printed signatures. Keep the repository private.
 
 ## Known gaps
 
 - **No multi-factor sign-in yet.** Add TOTP codes before wide use.
-- The certificate layout is a placeholder until the official ADOC template is applied.
-- The facility list in the certificate form should be checked against the current ADOC facility list.
+- The certificate text uses Baskerville, which is installed on Macs. On Windows it falls back to Baskerville Old Face (installed with Microsoft Office) or Georgia, so lettering can look slightly different there.
 - Anyone can deliberately lock a known email address by entering wrong passwords five times. A supervisor can reset it. Acceptable for a small team.
 - The IP throttle is held in memory and resets when the server restarts.
