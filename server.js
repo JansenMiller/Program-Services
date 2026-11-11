@@ -3,6 +3,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const zlib = require('zlib');
 const db = require('./lib/db');
 const auth = require('./lib/auth');
 const { ROLES, toolsFor, rolesForPath } = require('./lib/tools');
@@ -14,7 +15,9 @@ const PUBLIC = path.join(__dirname, 'public');
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.json': 'application/json; charset=utf-8',
+  '.otf': 'font/otf', '.ttf': 'font/ttf', '.woff': 'font/woff', '.woff2': 'font/woff2',
 };
+const COMPRESSIBLE = new Set(['.html', '.css', '.js', '.svg', '.json', '.otf', '.ttf']);
 
 // ---------- helpers ----------
 function audit(actor, action, detail, ip) {
@@ -215,9 +218,23 @@ function serveStatic(req, res, p) {
     if (st.isDirectory()) { res.writeHead(301, { Location: p + '/' }); return res.end(); }
     const ext = path.extname(abs).toLowerCase();
     if (!MIME[ext]) return notFound(res);
-    res.writeHead(200, { 'Content-Type': MIME[ext], 'Content-Length': st.size, 'Cache-Control': p.startsWith('/assets/') ? 'no-cache' : 'no-store' });
+    const headers = { 'Content-Type': MIME[ext], Vary: 'Accept-Encoding' };
+    if (p.startsWith('/assets/')) {
+      // Public brand files: let browsers keep them, but always check for a newer copy.
+      const etag = `W/"${st.size.toString(16)}-${Math.floor(st.mtimeMs).toString(16)}"`;
+      headers.ETag = etag;
+      headers['Cache-Control'] = p.startsWith('/assets/fonts/') ? 'public, max-age=86400' : 'no-cache';
+      if (req.headers['if-none-match'] === etag) { res.writeHead(304, headers); return res.end(); }
+    } else {
+      headers['Cache-Control'] = 'no-store';
+    }
+    const gzip = COMPRESSIBLE.has(ext) && /\bgzip\b/.test(req.headers['accept-encoding'] || '');
+    if (gzip) headers['Content-Encoding'] = 'gzip'; else headers['Content-Length'] = st.size;
+    res.writeHead(200, headers);
     if (req.method === 'HEAD') return res.end();
-    fs.createReadStream(abs).pipe(res);
+    const stream = fs.createReadStream(abs);
+    stream.on('error', () => res.destroy());
+    if (gzip) stream.pipe(zlib.createGzip({ level: 6 })).pipe(res); else stream.pipe(res);
   });
 }
 function notFound(res) {

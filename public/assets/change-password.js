@@ -3,7 +3,7 @@
   var P = window.Portal;
   var form = document.getElementById('f'), msg = document.getElementById('msg'), btn = document.getElementById('go');
   document.getElementById('logo').appendChild(P.logo('wm'));
-  P.start().then(function (me) {
+  P.start({ footer: false }).then(function (me) {
     if (me.user.mustChange) document.getElementById('intro').textContent = 'Your account was set up with a temporary password. Choose a new one to continue.';
     form.addEventListener('submit', function (e) {
       e.preventDefault();

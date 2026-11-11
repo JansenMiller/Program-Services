@@ -4,26 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#4F4F40">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <title>Sign in &middot; ADOC Staff Portal</title>
 <link rel="stylesheet" href="/assets/brand.css">
 </head>
 <body>
-<main class="narrow">
-  <div id="logo" style="color:var(--ranger-green);width:260px;margin:0 auto 26px"></div>
-  <div class="panel">
-    <h1>Staff sign in</h1>
-    <p class="sub">Program Services staff portal. Authorized ADOC staff only.</p>
-    <form id="f" autocomplete="on">
-      <label for="email">Email</label>
-      <input id="email" name="email" type="email" autocomplete="username" required autofocus>
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" required>
-      <button id="go" class="block" type="submit">SIGN IN</button>
-      <div id="msg" class="msg" role="alert"></div>
-    </form>
-    <p class="hint">Need an account or a password reset? Contact your Program Services supervisor.</p>
-  </div>
-</main>
+<div class="login">
+  <section class="login-hero">
+    <div id="logo"></div>
+    <div>
+      <div class="eyebrow">Program Services</div>
+      <h1>Staff<br>Portal</h1>
+      <p>Shortcuts for the work that takes the most time.</p>
+    </div>
+    <div class="foot-note">Alabama Department of Corrections</div>
+  </section>
+  <section class="login-side">
+    <div class="login-card rise">
+      <div class="panel">
+        <h2>Sign in</h2>
+        <p class="sub">Use your Program Services account.</p>
+        <form id="f" autocomplete="on">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="username" required autofocus>
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button id="go" class="block" type="submit">Sign in</button>
+          <div id="msg" class="msg" role="alert"></div>
+        </form>
+        <p class="hint">Need an account or a password reset? Contact your Program Services supervisor.</p>
+      </div>
+    </div>
+  </section>
+</div>
 <script src="/assets/app.js"></script>
 <script src="/assets/login.js"></script>
 </body>

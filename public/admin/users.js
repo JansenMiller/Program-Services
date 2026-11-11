@@ -7,7 +7,7 @@
   function showTemp(email, pw, verb) {
     temp.hidden = false; temp.textContent = '';
     temp.appendChild(el('div', { text: verb + ' ' + email + '. Give them this temporary password now. It will not be shown again:' }));
-    temp.appendChild(el('div', { style: 'margin-top:8px' }, el('code', { text: pw })));
+    temp.appendChild(el('code', { text: pw }));
   }
   function act(path, body, then) {
     return P.api(path, { method: 'POST', body: body || {} }).then(then || load).catch(function (e) { alert(e.message); load(); });
@@ -18,7 +18,7 @@
       rows.textContent = '';
       r.users.forEach(function (u) {
         var isMe = u.id === r.me;
-        var roleSel = el('select', { 'aria-label': 'Role for ' + u.name, style: 'width:auto' });
+        var roleSel = el('select', { 'aria-label': 'Role for ' + u.name });
         ROLES.forEach(function (k) { var o = el('option', { value: k, text: P.ROLE_LABEL[k] }); if (k === u.role) o.selected = true; roleSel.appendChild(o); });
         roleSel.disabled = isMe;
         roleSel.addEventListener('change', function () { act('/api/admin/users/' + u.id + '/role', { role: roleSel.value }); });
@@ -31,10 +31,10 @@
           act('/api/admin/users/' + u.id + '/active', { active: !u.active });
         } }));
 
-        var name = el('td', {}, u.name + (isMe ? ' (you)' : ''));
-        if (!u.active) name.appendChild(el('span', { class: 'badge', text: 'Off' }));
-        if (u.mustChange && u.active) name.appendChild(el('span', { class: 'badge', text: 'Awaiting first sign-in' }));
-        rows.appendChild(el('tr', { class: u.active ? '' : 'off' }, name, el('td', { text: u.email }), el('td', {}, roleSel), el('td', { text: P.fmtDate(u.lastLogin) }), el('td', {}, acts)));
+        var person = el('td', {}, el('span', { class: 'name', text: u.name + (isMe ? ' (you)' : '') }), el('span', { class: 'sub', text: u.email }));
+        if (!u.active) person.appendChild(el('span', { class: 'badge b-off', text: 'Off', style: 'margin-left:8px' }));
+        else if (u.mustChange) person.appendChild(el('span', { class: 'badge b-wait', text: 'Awaiting first sign-in', style: 'margin-left:8px' }));
+        rows.appendChild(el('tr', { class: u.active ? '' : 'off' }, person, el('td', {}, roleSel), el('td', { text: P.fmtDate(u.lastLogin) }), el('td', {}, acts)));
       });
     });
   }

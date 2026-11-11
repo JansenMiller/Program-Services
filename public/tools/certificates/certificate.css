@@ -1,24 +1,29 @@
-.cert-page{max-width:1280px;margin:0 auto;padding:28px;display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
-@media(max-width:900px){.cert-page{grid-template-columns:1fr}}
-.form-panel{margin:0;position:sticky;top:12px}
-@media(max-width:900px){.form-panel{position:static}}
-label.check{display:flex;gap:8px;align-items:flex-start;text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:13px;color:#000;margin-top:12px}
-label.check input{width:auto;margin-top:3px}
-button.block{margin-top:12px}
+.cert-page{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:24px;align-items:start}
+@media(max-width:960px){.cert-page{grid-template-columns:1fr}}
+.form-panel{position:sticky;top:14px}
+@media(max-width:960px){.form-panel{position:static}}
+label.check{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font:400 15px/1.45 var(--f-body);color:#000;margin-top:16px}
+label.check input{width:18px;height:18px;margin-top:3px;accent-color:var(--green);flex:none}
+.form-panel button{margin-top:12px}
+#count{min-height:22px;margin-top:12px;color:var(--brown);font:italic 400 14px/1.4 var(--f-fine)}
 
-.stage{display:flex;flex-direction:column;gap:20px}
+/* the "desk" the certificates sit on */
+.stage{display:flex;flex-direction:column;gap:26px;background:color-mix(in srgb,var(--silver) 32%,var(--tan));border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow)}
 .sheet{background:#fff}
-.sheet svg{display:block;width:100%;height:auto;border:1px solid var(--silver-tan);background:#fff}
-.sheet .cap{font-family:var(--f-head);font-size:12px;color:var(--battle-brown);margin-top:4px}
+.sheet svg{display:block;width:100%;height:auto;background:#fff;box-shadow:0 24px 40px -24px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.18)}
+.sheet .cap{font:700 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--brown);margin-top:12px;background:none}
+@media(max-width:560px){.stage{padding:14px}}
 
 @page{size:letter landscape;margin:0}
 @media print{
-  html,body{background:#fff}
-  header.site,.form-panel{display:none!important}
-  .cert-page{display:block;padding:0;max-width:none;margin:0}
-  .stage{display:block}
+  html,body{background:#fff;display:block;min-height:0}
+  header.site,.hero,footer.foot,.form-panel{display:none!important}
+  .page{max-width:none;padding:0;margin:0}
+  .lift{margin:0}
+  .cert-page{display:block}
+  .stage{display:block;background:none;border:0;box-shadow:none;padding:0;border-radius:0}
   .sheet{width:11in;height:8.49in;overflow:hidden;margin:0;padding:0;break-after:page;page-break-after:always;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .sheet:last-child{break-after:auto;page-break-after:auto}
-  .sheet svg{width:11in;height:8.5in;border:0}
+  .sheet svg{width:11in;height:8.5in;box-shadow:none}
   .sheet .cap,.sheet.blank{display:none}
 }

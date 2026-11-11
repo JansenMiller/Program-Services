@@ -71,6 +71,23 @@ test('health and public surface', async () => {
   assert.equal(login.headers.get('x-frame-options'), 'DENY');
   assert.equal((await c.req('GET', '/assets/brand.css')).status, 200);
   assert.equal((await c.req('GET', '/assets/logo.svg')).status, 200);
+  for (const f of ['RocGrotesk-Bold.otf', 'RocGrotesk-CondensedBold.otf', 'PTSerif-Regular.ttf', 'SpaceMono-Regular.ttf']) {
+    const r = await c.req('GET', '/assets/fonts/' + f);
+    assert.equal(r.status, 200, f);
+    assert.match(r.headers.get('content-type'), /^font\//, f);
+  }
+  assert.equal((await c.req('GET', '/assets/topo.svg')).status, 200);
+  assert.equal((await c.req('GET', '/assets/favicon.svg')).status, 200);
+  // browsers can reuse unchanged brand files
+  const css = await fetch(BASE + '/assets/brand.css');
+  const etag = css.headers.get('etag');
+  assert.ok(etag, 'brand.css has an ETag');
+  assert.equal((await fetch(BASE + '/assets/brand.css', { headers: { 'If-None-Match': etag } })).status, 304);
+  // large assets are compressed for browsers that accept it
+  const gz = await new Promise((resolve, reject) => {
+    http.get({ host: '127.0.0.1', port: PORT, path: '/assets/brand.css', headers: { 'Accept-Encoding': 'gzip' } }, (res) => { res.resume(); resolve(res.headers['content-encoding']); }).on('error', reject);
+  });
+  assert.equal(gz, 'gzip');
 });
 
 test('signed-out visitors are sent to login and APIs say 401', async () => {

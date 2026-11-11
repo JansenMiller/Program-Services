@@ -8,13 +8,15 @@
     P.api('/api/ideas').then(function (r) {
       document.getElementById('list-title').textContent = r.canManage ? 'All ideas' : 'Your ideas';
       list.textContent = '';
-      if (!r.ideas.length) list.appendChild(el('p', { class: 'hint', text: 'Nothing here yet.' }));
+      if (!r.ideas.length) list.appendChild(el('p', { class: 'empty', text: 'Nothing here yet. Your ideas will show up in this list.' }));
       r.ideas.forEach(function (i) {
-        var meta = (r.canManage ? i.by + ' · ' : '') + P.fmtDate(i.createdAt) + ' · ' + STATUS[i.status];
-        var row = el('div', { class: 'idea' }, el('h3', { text: i.title }), el('div', { class: 'meta', text: meta }));
+        var meta = (r.canManage ? i.by + ' · ' : '') + P.fmtDate(i.createdAt);
+        var row = el('div', { class: 'idea' },
+          el('div', { class: 'top' }, el('h3', { text: i.title }), el('span', { class: 'badge b-' + i.status, text: STATUS[i.status] })),
+          el('div', { class: 'meta', text: meta }));
         if (i.details) row.appendChild(el('p', { text: i.details }));
         if (r.canManage) {
-          var sel = el('select', { 'aria-label': 'Status for ' + i.title, style: 'width:auto;margin-top:8px' });
+          var sel = el('select', { 'aria-label': 'Status for ' + i.title });
           Object.keys(STATUS).forEach(function (k) {
             var o = el('option', { value: k, text: STATUS[k] }); if (k === i.status) o.selected = true; sel.appendChild(o);
           });
