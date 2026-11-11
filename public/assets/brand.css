@@ -1,0 +1,73 @@
+:root {
+  color-scheme: light;
+  --ranger-green:#4F4F40; --battle-brown:#655139; --silver-tan:#9A927E; --soft-tan:#E0DACE; --white:#fff; --black:#000;
+  --err:#9C3B2E; --ok:#3E5C3A;
+  --f-title:"Franklin Gothic Demi Cond","Arial Narrow",Arial,sans-serif;
+  --f-sub:"Franklin Gothic Medium Cond","Arial Narrow",Arial,sans-serif;
+  --f-head:"Franklin Gothic Medium","Franklin Gothic Book",Arial,sans-serif;
+  --f-body:Georgia,"Times New Roman",serif;
+  --f-btn:"Cascadia Mono",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--soft-tan);color:var(--black);font-family:var(--f-body);line-height:1.5}
+a{color:var(--battle-brown)}
+.adoc-logo{display:block;width:100%;height:auto}
+
+/* header */
+header.site{background:var(--soft-tan);border-bottom:2px solid var(--ranger-green);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+header.site .wm{color:var(--ranger-green);width:220px;display:block}
+header.site .who{display:flex;align-items:center;gap:14px;font-family:var(--f-head);font-size:13px;color:var(--battle-brown);flex-wrap:wrap}
+header.site .who a,header.site .who button.link{color:var(--battle-brown);background:none;border:0;padding:0;font:inherit;text-decoration:underline;cursor:pointer;margin:0;width:auto}
+.crumb{font-family:var(--f-head);font-size:13px;margin:0 0 14px}
+
+main.wrap{max-width:1100px;margin:0 auto;padding:28px}
+main.narrow{max-width:460px;margin:0 auto;padding:40px 20px}
+h1{font-family:var(--f-title);font-size:30px;margin:0 0 6px;color:var(--ranger-green);font-weight:700}
+h2{font-family:var(--f-title);font-size:21px;margin:0 0 10px;color:var(--ranger-green);font-weight:700}
+p.sub{margin:0 0 20px;color:var(--battle-brown);font-size:14px}
+
+.panel{background:var(--white);border:1px solid var(--silver-tan);border-radius:10px;padding:22px;margin-bottom:22px}
+
+/* forms */
+label{display:block;font-family:var(--f-sub);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--battle-brown);margin:14px 0 5px}
+input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--silver-tan);border-radius:6px;font:14px var(--f-body);background:#fff;color:#000}
+textarea{min-height:90px;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--ranger-green);outline-offset:1px}
+button{margin-top:18px;background:var(--black);color:var(--white);border:0;border-radius:6px;padding:11px 18px;font:700 13px var(--f-btn);letter-spacing:.3px;cursor:pointer}
+button.block{width:100%}
+button.secondary{background:#fff;color:#000;border:1px solid var(--silver-tan)}
+button.small{margin:0;padding:6px 10px;font-size:12px}
+button:disabled{opacity:.5;cursor:default}
+.msg{margin-top:14px;font-size:14px;min-height:20px}
+.msg.err{color:var(--err)}
+.msg.ok{color:var(--ok)}
+.hint{font-size:12px;color:var(--battle-brown);margin-top:6px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* tool cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.card{display:block;background:var(--white);border:1px solid var(--silver-tan);border-radius:10px;padding:20px;text-decoration:none;color:#000}
+a.card:hover{border-color:var(--ranger-green);box-shadow:0 2px 0 var(--ranger-green)}
+.card h3{font-family:var(--f-head);font-size:18px;margin:0 0 6px;color:var(--ranger-green)}
+.card p{margin:0;font-size:14px}
+.card.soon{opacity:.7}
+.badge{display:inline-block;font:700 10px var(--f-btn);letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--silver-tan);border-radius:20px;padding:2px 8px;margin-left:8px;color:var(--battle-brown);vertical-align:middle}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-family:var(--f-sub);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--battle-brown);padding:8px;border-bottom:2px solid var(--ranger-green)}
+td{padding:9px 8px;border-bottom:1px solid var(--soft-tan);vertical-align:top}
+td .acts{display:flex;gap:8px;flex-wrap:wrap}
+.off{opacity:.55}
+.tablewrap{overflow-x:auto}
+
+/* temp password box */
+.tempbox{background:var(--soft-tan);border:1px dashed var(--battle-brown);border-radius:8px;padding:14px;margin-top:16px}
+.tempbox code{font:700 18px var(--f-btn);letter-spacing:1px;user-select:all}
+
+.ideas .idea{border-bottom:1px solid var(--soft-tan);padding:12px 0}
+.ideas .idea:last-child{border-bottom:0}
+.ideas .idea h3{font-family:var(--f-head);font-size:16px;margin:0}
+.ideas .meta{font-size:12px;color:var(--battle-brown);margin:2px 0 6px}
+.ideas p{margin:0;font-size:14px;white-space:pre-wrap}

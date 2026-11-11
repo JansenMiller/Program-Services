@@ -1,0 +1,14 @@
+{
+  "name": "adoc-staff-portal",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ADOC Program Services staff portal: role-based shortcuts for Central Office, Social Service Caseworkers, and Chaplains",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test",
+    "create-user": "node scripts/create-user.js"
+  },
+  "engines": { "node": ">=22.13" },
+  "dependencies": {}
+}

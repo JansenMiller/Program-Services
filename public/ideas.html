@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Shortcut Ideas &middot; ADOC Staff Portal</title>
+<link rel="stylesheet" href="/assets/brand.css">
+</head>
+<body>
+<header id="site-header"></header>
+<main class="wrap">
+  <p class="crumb"><a href="/">&larr; Portal home</a></p>
+  <h1>Shortcut Ideas</h1>
+  <p class="sub">Something that eats up your time and happens over and over? Tell us. Please do not include names, AIS numbers or other details about specific people.</p>
+  <section class="panel">
+    <h2>Submit an idea</h2>
+    <form id="f">
+      <label for="title">What is the task?</label>
+      <input id="title" name="title" maxlength="120" required placeholder="e.g. Typing up class rosters every month">
+      <label for="details">How do you do it today, and how long does it take?</label>
+      <textarea id="details" name="details" maxlength="2000"></textarea>
+      <button type="submit">SEND IDEA</button>
+      <div id="msg" class="msg" role="alert"></div>
+    </form>
+  </section>
+  <section class="panel ideas">
+    <h2 id="list-title">Your ideas</h2>
+    <div id="list"></div>
+  </section>
+</main>
+<script src="/assets/app.js"></script>
+<script src="/ideas.js"></script>
+</body>
+</html>

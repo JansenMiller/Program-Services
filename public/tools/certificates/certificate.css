@@ -1,0 +1,37 @@
+.cert-page{max-width:1200px;margin:0 auto;padding:28px;display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
+@media(max-width:900px){.cert-page{grid-template-columns:1fr}}
+.form-panel{margin:0}
+.stage{background:#fff;border:1px solid var(--silver-tan);border-radius:10px;padding:14px;overflow:hidden}
+.scaler{width:100%;position:relative}
+.cert-wrap{transform-origin:top left}
+
+/* ---------- CERTIFICATE (US Letter landscape, 11in x 8.5in) ---------- */
+.cert{width:11in;height:8.5in;background:#fff;position:relative;color:#000;overflow:hidden;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cert .frame{position:absolute;inset:.35in;border:6px solid var(--ranger-green)}
+.cert .frame2{position:absolute;inset:.5in;border:1.5px solid var(--battle-brown)}
+.cert .inner{position:absolute;inset:.5in;padding:.4in .8in;display:flex;flex-direction:column;align-items:center;text-align:center}
+.cert .logo{color:var(--ranger-green);width:3.2in;margin-top:.1in}
+.cert .title{font-family:var(--f-title);font-weight:700;font-size:50px;letter-spacing:2px;text-transform:uppercase;color:var(--ranger-green);margin:.3in 0 0}
+.cert .rule{width:2.2in;height:3px;background:var(--battle-brown);margin:.14in 0 .22in}
+.cert .lead{font-size:17px;color:var(--battle-brown);font-style:italic}
+.cert .name{font-family:var(--f-title);font-size:42px;margin:.12in 0 .02in;min-height:52px;border-bottom:1.5px solid var(--silver-tan);padding:0 .4in}
+.cert .ais{font-family:var(--f-btn);font-size:14px;color:var(--battle-brown);min-height:20px;margin-top:6px}
+.cert .body{font-size:17px;margin-top:.2in;line-height:1.5}
+.cert .program{font-family:var(--f-head);font-weight:700;font-size:28px;color:var(--ranger-green);margin:.08in 0}
+.cert .meta{font-size:15px;color:#222;line-height:1.55}
+.cert .sigs{margin-top:auto;width:100%;display:flex;justify-content:space-around;align-items:flex-end;padding-bottom:.05in}
+.cert .sig{width:3in;text-align:center}
+.cert .sig .line{border-top:1.5px solid #000;padding-top:5px;font-size:14px;min-height:24px}
+.cert .sig .cap{font-family:var(--f-sub);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--battle-brown)}
+.cert .foot{font-family:var(--f-head);font-size:11px;color:var(--battle-brown);margin-top:.14in;letter-spacing:.4px}
+.draft-flag{position:absolute;top:10px;right:14px;font:700 11px var(--f-btn);color:#9C3B2E}
+
+@page{size:letter landscape;margin:0}
+@media print{
+  body{background:#fff}
+  header.site,.form-panel,.draft-flag{display:none!important}
+  .cert-page{display:block;padding:0;max-width:none}
+  .stage{border:0;padding:0;border-radius:0}
+  .scaler{height:auto!important}
+  .cert-wrap{transform:none!important}
+}

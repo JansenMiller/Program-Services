@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: adoc-staff-portal
+    runtime: node
+    plan: starter            # a persistent disk requires a paid plan
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    disk:
+      name: portal-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: ADMIN_EMAIL       # first supervisor account (only used if no users exist yet)
+        sync: false
+      - key: ADMIN_NAME
+        sync: false
+      - key: ADMIN_PASSWORD    # temporary; must be changed at first sign-in. Remove after first login.
+        sync: false
