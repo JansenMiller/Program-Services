@@ -22,12 +22,12 @@ Run the tests with `node --test`.
 
 ## Deploy to Render
 
-1. Push this folder to a GitHub repository (suggested name: `adoc-staff-portal`).
-2. In Render choose **New > Blueprint**, pick the repository, and Render reads `render.yaml`.
-3. When prompted, enter `ADMIN_EMAIL`, `ADMIN_NAME` and `ADMIN_PASSWORD` (a one-time temporary password).
+1. Push this repository to GitHub.
+2. In Render choose **New > Blueprint**, pick the repository and the `main` branch. Render reads `render.yaml` and proposes a web service named `adoc-staff-portal` with a 1 GB persistent disk.
+3. When prompted, enter `ADMIN_EMAIL`, `ADMIN_NAME` and `ADMIN_PASSWORD` (a one-time temporary password), then apply.
 4. After the first deploy, open the site, sign in, and change the password. Then **delete `ADMIN_PASSWORD`** from the Render environment settings.
 
-The accounts database lives on a Render **persistent disk** mounted at `/var/data`. Persistent disks need a paid web service plan (the blueprint uses `starter`). Without the disk, accounts would vanish on every deploy.
+The accounts database is a file on the persistent disk mounted at `/var/data`. Persistent disks need a paid web service plan (the blueprint uses `starter`). Without the disk, accounts would vanish on every deploy.
 
 Each push to the connected branch redeploys automatically.
 
