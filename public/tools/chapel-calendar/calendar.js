@@ -55,7 +55,11 @@
       if (box.firstChild !== sheet) return;
       var fitted = S.fit(sheet);
       S.scaleTo(box, sheet, minScale());
-      showAlert(fitted.cramped ? 'This month is very full, so the text is printing small. Shorter names, or moving some details into the note, will make it easier to read.' : '');
+      var msg = '';
+      if (fitted.tall) msg = 'This month has more events than fit on one page, so the printout will run onto a second page. Shorter names, or moving some details into the note, will bring it back to one page.';
+      else if (fitted.cramped) msg = 'This month is very full, so the text is printing small' + (fitted.hidLocation ? ' and room names are left off' : '') + '. Shorter names, or moving some details into the note, will make it easier to read.';
+      else if (fitted.hidLocation) msg = 'This month is full, so room names are left off the printed calendar to keep the text readable. They are still saved with each event.';
+      showAlert(msg);
     }
     refit();
     // measure again once the brand fonts have loaded, since they are wider or narrower than the fallback

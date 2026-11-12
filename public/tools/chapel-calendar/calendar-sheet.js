@@ -132,27 +132,63 @@
     }
     var grid = sheet.querySelector('.sh-grid');
     if (!grid) return { cramped: false };
+    sheet.style.height = '';
+    // a long note makes the footer taller, and the calendar grid gives up that space
+    var foot = sheet.querySelector('.sh-foot'), note = sheet.querySelector('.sh-note');
+    if (foot && note) {
+      foot.style.height = '';
+      var more = note.scrollHeight - note.clientHeight;
+      if (more > 1) foot.style.height = (foot.clientHeight + more) + 'px';
+    }
+    sheet.classList.remove('tall', 'hide-loc', 'hide-det');
     var weeks = [].slice.call(grid.children), avail = grid.clientHeight, MIN_ROW = 64;
     sheet.classList.add('measuring');
-    var fs = 13.5, ok = false, hs = [], sum = 0;
-    while (fs >= 6.9) {
+
+    // Biggest text size at which every week fits. If nothing fits, leave off room names, then details, before shrinking further.
+    // Every day always stays on the page.
+    var LEVELS = [
+      { cls: [], max: 13, min: 8.25 },
+      { cls: ['hide-loc'], max: 13, min: 7.5 },
+      { cls: ['hide-loc', 'hide-det'], max: 13, min: 6.5 },
+      { cls: ['hide-loc', 'hide-det'], max: 6.25, min: 5 },
+    ];
+    var res = null, level = 0;
+    for (level = 0; level < LEVELS.length; level++) {
+      var L = LEVELS[level];
+      sheet.classList.remove('hide-loc', 'hide-det');
+      L.cls.forEach(function (c) { sheet.classList.add(c); });
+      res = tryFit(sheet, weeks, avail, MIN_ROW, L.max, L.min);
+      if (res.ok) break;
+    }
+    if (level === LEVELS.length) level = LEVELS.length - 1;
+    sheet.classList.remove('measuring');
+
+    var extra = res.ok ? avail - res.sum : 0, tall = false;
+    weeks.forEach(function (w, i) { w.style.height = (res.hs[i] + (res.ok ? extra * res.hs[i] / res.sum : 0)) + 'px'; });
+    if (!res.ok) { // so much that it cannot fit even at a tiny size: let the page grow rather than hide any day
+      sheet.style.height = (SHEET_H + (res.sum - avail)) + 'px'; sheet.classList.add('tall'); tall = true;
+    }
+    var hidLoc = level >= 1 && !!sheet.querySelector('.el'), hidDet = level >= 2 && !!sheet.querySelector('.ed');
+    return { cramped: tall || res.fs < 7.25, tall: tall, fontSize: res.fs, hidLocation: hidLoc, hidDetail: hidDet };
+  }
+
+  function tryFit(sheet, weeks, avail, minRow, maxFs, minFs) {
+    var fs = maxFs, hs = [], sum = 0;
+    while (fs >= minFs - 0.001) {
       sheet.style.setProperty('--fs', fs + 'px');
-      hs = weeks.map(function (w) { w.style.height = 'auto'; return Math.max(MIN_ROW, w.offsetHeight); });
+      hs = weeks.map(function (w) { w.style.height = 'auto'; return Math.max(minRow, w.offsetHeight); });
       sum = hs.reduce(function (a, b) { return a + b; }, 0);
-      if (sum <= avail) { ok = true; break; }
+      if (sum <= avail) return { ok: true, fs: fs, hs: hs, sum: sum };
       fs -= 0.25;
     }
-    sheet.classList.remove('measuring');
-    var extra = ok ? avail - sum : 0;
-    weeks.forEach(function (w, i) { w.style.height = (hs[i] + (ok ? extra * hs[i] / sum : 0)) + 'px'; });
-    return { cramped: !ok, fontSize: fs };
+    return { ok: false, fs: minFs, hs: hs, sum: sum };
   }
 
   // On screen the sheet is scaled to the width of its box. (Printing ignores the scale.)
   function scaleTo(box, sheet, minScale) {
     var k = Math.max(minScale || 0, Math.min(1, box.clientWidth / SHEET_W));
     sheet.style.transform = 'scale(' + k + ')';
-    box.style.height = Math.round(SHEET_H * k) + 'px';
+    box.style.height = Math.round((sheet.offsetHeight || SHEET_H) * k) + 'px';
     return k;
   }
 

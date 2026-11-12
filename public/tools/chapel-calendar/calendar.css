@@ -6,33 +6,35 @@ button.plain:active:not(:disabled){transform:none}
 /* ---------- the calendar sheet: 11 x 8.5 in (1056 x 816 px), same on screen and on paper ---------- */
 .sheet-box{position:relative;width:100%}
 .sheet{--fs:10px;position:absolute;left:0;top:0;width:1056px;height:816px;transform-origin:0 0;background:#fff;color:#000;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 26px 44px -26px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.2);-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.sh-head{flex:none;height:128px;background:var(--green) url(/assets/topo.svg) center/cover no-repeat;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 34px}
+.sh-head{flex:none;height:112px;background:var(--green) url(/assets/topo.svg) center/cover no-repeat;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 34px}
 .sh-left{display:flex;flex-direction:column;min-width:0;flex:1 1 auto}
-.sh-logo{width:116px;color:var(--tan);margin-bottom:12px}
+.sh-logo{width:116px;color:var(--tan);margin-bottom:9px}
 .sh-eyebrow{display:none}
 .sh-facility{font:700 54px/1 var(--f-display);text-transform:uppercase;letter-spacing:.012em;color:#fff;margin:0;white-space:nowrap}
 .sh-month{display:flex;align-items:baseline;gap:16px;font:700 64px/1 var(--f-display);text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;flex:none}
 .sh-month .m{color:#fff}
 .sh-month .y{color:var(--tan)}
-.sh-dow{flex:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin:12px 20px 0;background:var(--tan);border:1px solid var(--silver);border-bottom:0}
-.sh-dow span{font:700 9px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--green);text-align:center;padding:7px 0 6px}
+.sh-dow{flex:none;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));margin:10px 20px 0;background:var(--tan);border:1px solid var(--silver);border-bottom:0}
+.sh-dow span{font:700 9px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--green);text-align:center;padding:6px 0 5px}
 .sh-grid{flex:1;min-height:0;margin:0 20px;display:flex;flex-direction:column;overflow:hidden;border-left:1px solid var(--silver);border-top:1px solid var(--silver)}
 .sh-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));flex:none}
 .measuring .sh-week{height:auto}
-.sh-day{position:relative;border-right:1px solid var(--silver);border-bottom:1px solid var(--silver);padding:4px 5px 5px;min-width:0;overflow:hidden}
+.sheet.hide-loc .el{display:none}
+.sheet.hide-det .ed{display:none}
+.sh-day{position:relative;border-right:1px solid var(--silver);border-bottom:1px solid var(--silver);padding:3px 3px 2px;min-width:0;overflow:hidden}
 .sh-day.out{background:color-mix(in srgb,var(--tan) 42%,#fff)}
 .sh-day.has-closed{background:repeating-linear-gradient(135deg,#fff 0 6px,color-mix(in srgb,var(--silver) 22%,#fff) 6px 7px)}
-.sh-dn{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;min-height:20px}
-.sh-dn .num{font:700 18px/1 var(--f-head);color:var(--green)}
-.sh-day.today .num{background:var(--green);color:var(--tan);border-radius:99px;padding:2px 6px;margin:-2px 0 0 -4px}
+.sh-dn{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;min-height:16px}
+.sh-dn .num{font:700 16px/1 var(--f-head);color:var(--green)}
+.sh-day.today .num{background:var(--green);color:var(--tan);border-radius:99px;padding:2px 5px;margin:-2px 0 0 -3px}
 .sh-dn .hol{font:400 7px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--brown);text-align:right}
 .sh-dn .hol.h{font-weight:700}
-.sh-evs{font-size:var(--fs);line-height:1.2}
-.ev{margin-top:3px;padding:1px 0 1px 5px;border-left:2.5px solid var(--green);border-radius:1px}
+.sh-evs{font-size:var(--fs);line-height:1.17}
+.ev{margin-top:2px;padding:0 0 0 4px;border-left:2.5px solid var(--green);border-radius:1px}
 .ev.k-study{border-left-color:var(--brown)}
-.ev.k-special{border-left:0;background:var(--brown);color:#fff;padding:2px 5px;border-radius:3px}
-.ev.k-closed{border-left:0;background:#000;color:#fff;padding:3px 5px;border-radius:3px;text-align:center}
-.et{font:700 .84em var(--f-mono);letter-spacing:-.01em;color:var(--brown)}
+.ev.k-special{border-left:0;background:var(--brown);color:#fff;padding:1px 4px;border-radius:3px}
+.ev.k-closed{border-left:0;background:#000;color:#fff;padding:2px 4px;border-radius:3px;text-align:center}
+.et{font:700 .94em var(--f-head);letter-spacing:0;color:var(--brown);white-space:nowrap}
 .k-special .et{color:var(--tan)}
 .en{font:700 1em var(--f-head)}
 .ed{font:400 1em var(--f-head)}
@@ -40,12 +42,12 @@ button.plain:active:not(:disabled){transform:none}
 .k-special .el{color:var(--tan)}
 .ev-closed{font:700 .92em var(--f-mono);letter-spacing:.1em;text-transform:uppercase}
 .ev-sub{font:400 .85em var(--f-head);color:var(--tan)}
-.sh-foot{flex:none;height:80px;margin:8px 20px 14px;display:flex;gap:30px;align-items:flex-end}
+.sh-foot{flex:none;height:54px;margin:6px 20px 12px;display:flex;gap:30px;align-items:flex-end}
 .sh-note{flex:1;min-width:0;font:italic 400 9.5px/1.4 var(--f-fine);color:#222;align-self:stretch;overflow:hidden}
 .sh-note .lbl{display:block;font:700 8px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--brown);font-style:normal;margin-bottom:3px}
 .sh-sign{display:flex;gap:28px;flex:none}
 .sig{width:210px}
-.sig .line{border-bottom:1.2px solid #000;height:34px}
+.sig .line{border-bottom:1.2px solid #000;height:28px}
 .sig .who{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-top:4px}
 .sig .role{font:700 8px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--brown)}
 .sig .nm{font:400 10.5px/1.1 var(--f-head);text-align:right}
@@ -168,6 +170,7 @@ tr.ns td{background:repeating-linear-gradient(135deg,#fff 0 8px,color-mix(in srg
   .sheet-box:last-child{break-after:auto;page-break-after:auto}
   .sheet{position:static;transform:none!important;width:11in;height:8.49in;box-shadow:none}
   .sh-add{display:none!important}
+  .sheet.tall{height:auto!important;min-height:8.49in}
 }
 
 /* several sheets on one page (supervisor print-all) */
