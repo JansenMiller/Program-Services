@@ -8,6 +8,7 @@ const db = require('./lib/db');
 const auth = require('./lib/auth');
 const { ROLES, toolsFor, rolesForPath } = require('./lib/tools');
 const calendar = require('./lib/calendar');
+const reentry = require('./lib/reentry');
 const demo = require('./lib/demo');
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -138,6 +139,9 @@ async function api(req, res, p, sess, ip) {
 
   // ----- chapel calendars and facility list -----
   if (await calendar.handle({ req, res, p, sess, ip, json, readJson, audit })) return;
+
+  // ----- monthly tracking report (social workers and supervisors) -----
+  if (await reentry.handle({ req, res, p, sess, ip, json, readJson, audit })) return;
 
   // ----- shortcut ideas (any signed-in role) -----
   if (p === '/api/ideas' && m === 'GET') {

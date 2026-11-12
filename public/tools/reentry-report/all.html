@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#4F4F40">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<title>Tracking Reports &middot; ADOC Staff Portal</title>
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/tools/reentry-report/report.css">
+</head>
+<body>
+<header id="site-header" class="site"></header>
+<section class="hero compact">
+  <div class="in">
+    <a class="back" href="/">&larr; Portal home</a>
+    <h1>Tracking reports</h1>
+    <p class="lead">Every facility&rsquo;s monthly Statistical and Tracking Report. See who has submitted, open any report, and download the Excel file.</p>
+  </div>
+</section>
+<main class="page">
+  <div class="lift stack">
+    <section class="panel rise">
+      <div class="ov-filters">
+        <div><label for="fMonth">Report month</label><select id="fMonth"></select></div>
+        <div><label for="fStatus">Status</label>
+          <select id="fStatus">
+            <option value="">All statuses</option>
+            <option value="submitted">Submitted</option>
+            <option value="draft">Draft</option>
+            <option value="notstarted">Not started</option>
+            <option value="overdue">Overdue (not submitted)</option>
+          </select>
+        </div>
+        <div><label for="fFac">Facility</label><select id="fFac"></select></div>
+      </div>
+      <div class="ov-sum" id="sum" aria-live="polite"></div>
+    </section>
+
+    <div class="rp-due" id="due" hidden></div>
+
+    <section class="panel rise" style="--i:1">
+      <h2 id="tableTitle" style="margin:0 0 14px">Facilities</h2>
+      <div class="tablewrap"><table>
+        <thead><tr id="head"></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <div class="empty" id="empty" hidden>No facilities match these filters.</div>
+      <p class="hint">A report for a month is due on the 5th of the next month. &ldquo;Not started&rdquo; means a social worker is assigned to the facility but nothing has been saved yet. Opening a report here is read-only; only the facility&rsquo;s own social worker can change the numbers.</p>
+    </section>
+  </div>
+</main>
+<script src="/assets/app.js"></script>
+<script src="/tools/reentry-report/report-core.js"></script>
+<script src="/tools/reentry-report/all.js"></script>
+</body>
+</html>

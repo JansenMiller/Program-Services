@@ -33,7 +33,7 @@
       return r.json().catch(function () { return {}; }).then(function (data) {
         if (r.status === 401 && path !== '/api/login') { location.href = '/login.html'; }
         if (r.status === 403 && data.error === 'password_change_required') { location.href = '/change-password.html'; }
-        if (!r.ok) { var e = new Error(data.error || 'Something went wrong.'); e.status = r.status; throw e; }
+        if (!r.ok) { var e = new Error(data.error || 'Something went wrong.'); e.status = r.status; e.data = data; throw e; }
         return data;
       });
     });
@@ -61,6 +61,7 @@
     users: ['M16 20v-1.5a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4V20', 'M10 11.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z', 'M20 20v-1.4a3.5 3.5 0 0 0-2.5-3.3', 'M15.5 4.7a3.5 3.5 0 0 1 0 6.6'],
     arrow: ['M5 12h14', 'M13 6l6 6-6 6'],
     chevron: ['M6 9l6 6 6-6'],
+    chart: ['M3.5 20.5h17', 'M6.5 20.5V12', 'M11.5 20.5V5', 'M16.5 20.5v-6.5'],
     printer: ['M7 9V4h10v5', 'M7 17H5a1.5 1.5 0 0 1-1.5-1.5v-5A1.5 1.5 0 0 1 5 9h14a1.5 1.5 0 0 1 1.5 1.5v5A1.5 1.5 0 0 1 19 17h-2', 'M7 14h10v6H7z'],
   };
   function icon(name) {

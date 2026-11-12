@@ -26,6 +26,9 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+button.plain{margin:0;padding:0;background:none;border:0;border-radius:0;color:inherit;font:inherit;letter-spacing:inherit;text-transform:none;box-shadow:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+button.plain:hover:not(:disabled){background:none;color:inherit;box-shadow:none;border-color:transparent}
+button.plain:active:not(:disabled){transform:none}
 html,body{margin:0}
 body{background:var(--paper);color:var(--black);font:400 16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
 body>main,body>.login{flex:1 0 auto}
@@ -182,3 +185,16 @@ footer.foot{flex:none;background:var(--green);color:var(--silver);text-align:cen
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .rise{animation:rise .55s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i,0) * 70ms)}
 @media(prefers-reduced-motion:reduce){.rise{animation:none}*{transition:none!important}}
+
+/* home page reminder */
+.notice{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:18px 24px;border-radius:var(--radius);background:var(--tan);color:var(--black);box-shadow:var(--shadow);margin-bottom:22px;text-decoration:none}
+.notice .t{flex:1;min-width:240px}
+.notice b{display:block;font:700 22px/1.15 var(--f-head)}
+.notice span{font-size:15px;color:#222}
+.notice .go{font:700 11px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--brown);display:flex;align-items:center;gap:8px}
+.notice .go svg{width:18px;height:18px}
+.notice.late{background:var(--brown);color:#fff}
+.notice.late span,.notice.late .go{color:var(--tan)}
+.notice.done{background:var(--green);color:#fff}
+.notice.done span,.notice.done .go{color:var(--tan)}
+a.notice:hover{box-shadow:0 2px 0 var(--green),0 28px 50px -28px rgba(40,40,30,.7)}

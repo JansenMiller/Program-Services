@@ -26,8 +26,8 @@ test('demo accounts exist only while DEMO_PASSWORD is set', async () => {
 
   // each sees its own tools
   const tools = async (c) => (await c.req('GET', '/api/me')).json.tools.map((t) => t.id).sort();
-  assert.deepEqual(await tools(sup), ['certificates', 'chapel-calendar', 'ideas', 'users']);
-  assert.deepEqual(await tools(cw), ['certificates', 'ideas']);
+  assert.deepEqual(await tools(sup), ['certificates', 'chapel-calendar', 'ideas', 'reentry-report', 'users']);
+  assert.deepEqual(await tools(cw), ['certificates', 'ideas', 'reentry-report']);
   assert.deepEqual(await tools(ch), ['chapel-calendar', 'ideas']);
   const supCal = (await sup.req('GET', '/api/me')).json.tools.find((t) => t.id === 'chapel-calendar');
   assert.equal(supCal.href, '/tools/chapel-calendar/all.html');

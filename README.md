@@ -53,6 +53,19 @@ Demo accounts only see demo data, and real accounts never see it. **Delete `DEMO
 - Holiday labels (and the automatic "Chapel Closed" suggestions) come from a built-in list of US federal holidays. Check them against ADOC's actual schedule each year.
 - Facility names come from `lib/facilities.js` plus any name typed in Manage Team. Edit that list if a name should read differently on the printed header.
 
+## Monthly Tracking Report (reentry social workers)
+
+Replaces typing into the Men's / Women's "Statistical and Tracking Report" workbook each month.
+
+- Each caseworker account belongs to one facility (set in **Manage Team**) and works on that facility's report only. The Men's or Women's program list is chosen from the facility name.
+- **Programs**: brought forward, enrollments, terminations, graduations and race counts per program. Brought forward starts at last month's ending total; totals work themselves out; race counts must equal the total. **Service documents**: the seven blocks from the Service Docs tab. **Graduation roster**: AIS number, program and date, pasted one per line. The Graduated number defaults to the roster count for that program and month.
+- Everything autosaves. A report is a Draft until the social worker clicks **Submit** on the Review tab (blocked while anything is blank or doesn't add up). Changing anything afterward, including the roster, puts it back to Draft.
+- **Deadline**: the report for a month is due on the 5th of the next month. Caseworkers see a banner on the home page (due in N days / overdue / submitted) and supervisors see how many facilities have submitted.
+- **Regional Reentry Coordinators** sign in with supervisor accounts. **Tracking Reports** (supervisor view) lists every facility by month with status, a read-only view of each report, and **Excel** download.
+- **Download Excel** fills in the department's own workbook (`lib/templates/men.xlsx` and `women.xlsx`, with all sample data removed), so the file looks exactly like the one staff used to send. If the department changes the workbook layout, replace those templates and adjust `lib/reentry-export.js`.
+- Dates use Central time. Set `PORTAL_TODAY=YYYY-MM-DD` only for testing.
+- Demo accounts get sample reports (one half-finished for the demo caseworker, the rest submitted).
+
 ## Adding a new shortcut
 
 1. Add an entry to `lib/tools.js` (id, name, description, link, and which roles may use it).
@@ -72,11 +85,13 @@ Pages must not use inline `<script>` blocks or inline event handlers. The conten
 - Headers: strict content security policy (no inline script), no framing, no-store, no-index, HSTS in production.
 - Audit log table records sign-ins, failures, lockouts and account changes (no passwords, no participant data).
 - Certificate details are typed into the browser and printed from it. They are not sent to the server.
+- The Monthly Tracking Report is the exception: its numbers and the Graduation Roster (AIS numbers, program, graduation date) are stored on the server's persistent disk, scoped to the facility. Back up the disk accordingly.
 - The certificate artwork (`public/tools/certificates/certificate-bg.svg`) is the approved ADOC design, including the pre-printed signatures. Keep the repository private.
 
 ## Known gaps
 
 - **No multi-factor sign-in yet.** Add TOTP codes before wide use.
 - The certificate text uses Baskerville, which is installed on Macs. On Windows it falls back to Baskerville Old Face (installed with Microsoft Office) or Georgia, so lettering can look slightly different there.
+- Tracking report: the service documents' "Total ... end of month" boxes are typed in by hand because the workbook's formula for them wasn't specified. Regional Reentry Coordinators use supervisor accounts, so they can also manage the team; a read-only reviewer role would be a small addition. The men's program list (CBT, Anger Management, Getting It Right) is an assumption from the workbook.
 - Anyone can deliberately lock a known email address by entering wrong passwords five times. A supervisor can reset it. Acceptable for a small team.
 - The IP throttle is held in memory and resets when the server restarts.

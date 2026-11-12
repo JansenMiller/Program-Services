@@ -180,7 +180,7 @@ test('role guards: caseworker', async () => {
   assert.equal((await c.req('POST', '/api/admin/users', { body: { name: 'X', email: 'x@example.test', role: 'supervisor' } })).status, 403);
   assert.equal((await c.req('POST', '/api/admin/users/1/role', { body: { role: 'caseworker' } })).status, 403);
   const me = await c.me();
-  assert.deepEqual(me.json.tools.map((t) => t.id).sort(), ['certificates', 'ideas']);
+  assert.deepEqual(me.json.tools.map((t) => t.id).sort(), ['certificates', 'ideas', 'reentry-report']);
 });
 
 test('role guards: chaplain', async () => {

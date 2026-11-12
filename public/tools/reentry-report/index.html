@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#4F4F40">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<title>Monthly Tracking Report &middot; ADOC Staff Portal</title>
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/tools/reentry-report/report.css">
+</head>
+<body>
+<header id="site-header" class="site"></header>
+<section class="hero compact">
+  <div class="in">
+    <a class="back" id="backLink" href="/">&larr; Portal home</a>
+    <h1>Monthly tracking report</h1>
+    <p class="lead" id="heroLead">Statistical and Tracking Report for your facility. Everything saves as you type.</p>
+  </div>
+</section>
+<main class="page">
+  <div class="lift stack">
+    <section class="panel rise rp-bar" aria-label="Report controls">
+      <button type="button" class="secondary nav-btn" id="prev" aria-label="Previous month">&larr;</button>
+      <select id="monthSel" aria-label="Report month"></select>
+      <button type="button" class="secondary nav-btn" id="next" aria-label="Next month">&rarr;</button>
+      <div class="rp-fac" id="facName"></div>
+      <span class="grow"></span>
+      <span id="saveState" class="rp-save" role="status" aria-live="polite"></span>
+      <span class="viewonly" id="viewonly" hidden>View only</span>
+      <span id="status" class="badge b-wait" hidden>Draft</span>
+    </section>
+
+    <div class="rp-due" id="due" hidden></div>
+    <div class="cal-alert" id="alert" role="alert" hidden></div>
+
+    <div class="rp-tabs" role="tablist" aria-label="Report sections">
+      <button type="button" role="tab" id="tab-programs" data-tab="programs" aria-selected="true">Programs <span class="n" hidden></span></button>
+      <button type="button" role="tab" id="tab-docs" data-tab="docs" aria-selected="false">Service documents <span class="n" hidden></span></button>
+      <button type="button" role="tab" id="tab-roster" data-tab="roster" aria-selected="false">Graduation roster <span class="n" hidden></span></button>
+      <button type="button" role="tab" id="tab-review" data-tab="review" aria-selected="false">Review &amp; submit <span class="n" hidden></span></button>
+    </div>
+
+    <section id="pane-programs" class="rp-pane" role="tabpanel" aria-labelledby="tab-programs"></section>
+    <section id="pane-docs" class="rp-pane" role="tabpanel" aria-labelledby="tab-docs" hidden></section>
+    <section id="pane-roster" class="rp-pane" role="tabpanel" aria-labelledby="tab-roster" hidden></section>
+    <section id="pane-review" class="rp-pane" role="tabpanel" aria-labelledby="tab-review" hidden></section>
+  </div>
+</main>
+<script src="/assets/app.js"></script>
+<script src="/tools/reentry-report/report-core.js"></script>
+<script src="/tools/reentry-report/report.js"></script>
+</body>
+</html>
