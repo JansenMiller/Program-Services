@@ -151,7 +151,9 @@ test('supervisor can add staff; duplicates and bad input are refused', async () 
   assert.equal(cw.json.email, 'casey@example.test');
   assert.equal(cw.json.tempPassword.length, 14);
   state.cw = cw.json;
-  const ch = await c.req('POST', '/api/admin/users', { body: { name: 'Chip Chaplain', email: 'chip@example.test', role: 'chaplain' } });
+  // a chaplain must belong to a facility
+  assert.equal((await c.req('POST', '/api/admin/users', { body: { name: 'No Facility', email: 'nofac@example.test', role: 'chaplain' } })).status, 400);
+  const ch = await c.req('POST', '/api/admin/users', { body: { name: 'Chip Chaplain', email: 'chip@example.test', role: 'chaplain', facility: 'Test Facility' } });
   assert.equal(ch.status, 201); state.ch = ch.json;
   assert.equal((await c.req('POST', '/api/admin/users', { body: { name: 'Dup', email: 'casey@example.test', role: 'caseworker' } })).status, 409);
   assert.equal((await c.req('POST', '/api/admin/users', { body: { name: 'Bad', email: 'not-an-email', role: 'caseworker' } })).status, 400);
@@ -232,6 +234,9 @@ test('turning an account off ends its sessions; reset forces a new password', as
   // self-protection
   assert.equal((await sup.req('POST', `/api/admin/users/${meId}/active`, { body: { active: false } })).status, 400);
   assert.equal((await sup.req('POST', `/api/admin/users/${meId}/role`, { body: { role: 'caseworker' } })).status, 400);
+  // making someone a chaplain needs a facility first
+  assert.equal((await sup.req('POST', `/api/admin/users/${cwId}/role`, { body: { role: 'chaplain' } })).status, 400);
+  assert.equal((await sup.req('POST', `/api/admin/users/${cwId}/facility`, { body: { facility: 'Test Facility' } })).status, 200);
   assert.equal((await sup.req('POST', `/api/admin/users/${cwId}/role`, { body: { role: 'chaplain' } })).status, 200);
   assert.equal((await sup.req('POST', '/api/admin/users/99999/reset', { body: {} })).status, 404);
 });

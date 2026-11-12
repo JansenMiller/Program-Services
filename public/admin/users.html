@@ -33,6 +33,11 @@
           <option value="chaplain">Chaplain</option>
           <option value="supervisor">Supervisor (Central Office)</option>
         </select>
+        <div id="facRow" hidden>
+          <label for="facility">Facility</label>
+          <select id="facility" name="facility"></select>
+          <p class="hint" style="margin-top:8px">Each chaplain sees and edits only their own facility's calendar. The facility name prints at the top of every calendar.</p>
+        </div>
         <button type="submit">Create account</button>
         <div id="msg" class="msg" role="alert"></div>
       </form>
@@ -41,7 +46,7 @@
     <section class="panel rise" style="--i:1">
       <h2>Team</h2>
       <div class="tablewrap"><table>
-        <thead><tr><th>Person</th><th>Role</th><th>Last sign-in</th><th>Actions</th></tr></thead>
+        <thead><tr><th>Person</th><th>Role</th><th>Facility</th><th>Last sign-in</th><th>Actions</th></tr></thead>
         <tbody id="rows"></tbody>
       </table></div>
     </section>

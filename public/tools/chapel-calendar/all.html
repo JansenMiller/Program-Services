@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#4F4F40">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<title>Chapel Calendars &middot; ADOC Staff Portal</title>
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/tools/chapel-calendar/calendar.css">
+</head>
+<body>
+<header id="site-header" class="site"></header>
+<section class="hero compact">
+  <div class="in">
+    <a class="back" href="/">&larr; Portal home</a>
+    <h1>Chapel calendars</h1>
+    <p class="lead">Every facility's calendar in one place. Filter by month, facility or status, and click a column heading to sort.</p>
+  </div>
+</section>
+<main class="page">
+  <div class="lift stack">
+    <section class="panel rise">
+      <div class="ov-filters">
+        <div><label for="fMonth">Month</label><select id="fMonth"></select></div>
+        <div><label for="fFac">Facility</label><select id="fFac"></select></div>
+        <div><label for="fStatus">Status</label>
+          <select id="fStatus">
+            <option value="">All statuses</option>
+            <option value="final">Final</option>
+            <option value="draft">Draft</option>
+            <option value="notstarted">Not started</option>
+          </select>
+        </div>
+        <div><label for="fSort">Sort by</label>
+          <select id="fSort">
+            <option value="month-desc">Month, newest first</option>
+            <option value="month-asc">Month, oldest first</option>
+            <option value="facility-asc">Facility, A to Z</option>
+            <option value="facility-desc">Facility, Z to A</option>
+          </select>
+        </div>
+      </div>
+      <div class="ov-sum" id="sum" aria-live="polite"></div>
+    </section>
+
+    <section class="panel rise" style="--i:1">
+      <div class="cal-tools" style="padding:0 0 14px">
+        <h2 style="margin:0" id="tableTitle">Calendars</h2>
+        <span class="grow"></span>
+        <a class="btn secondary" id="printAll" href="#" hidden style="margin:0;padding:10px 16px">Print all for this month</a>
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr id="head"></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <div class="empty" id="empty" hidden>No calendars match these filters.</div>
+      <p class="hint">&ldquo;Not started&rdquo; means a facility has a chaplain on the team but no events yet for that month. Only the facility's chaplain can change a calendar; you can open, review and print any of them.</p>
+    </section>
+  </div>
+</main>
+<script src="/assets/app.js"></script>
+<script src="/tools/chapel-calendar/calendar-core.js"></script>
+<script src="/tools/chapel-calendar/all.js"></script>
+</body>
+</html>

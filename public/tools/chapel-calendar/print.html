@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#4F4F40">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<title>Print Chapel Calendars &middot; ADOC Staff Portal</title>
+<link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/tools/chapel-calendar/calendar.css">
+</head>
+<body>
+<header id="site-header" class="site"></header>
+<section class="hero compact">
+  <div class="in">
+    <a class="back" href="/tools/chapel-calendar/all.html">&larr; All calendars</a>
+    <h1>Print calendars</h1>
+    <p class="lead">One landscape page per facility, ready to print or save as a single PDF.</p>
+  </div>
+</section>
+<main class="page">
+  <div class="lift">
+    <section class="panel rise cal-tools" aria-label="Print options">
+      <select id="pMonth" aria-label="Month"></select>
+      <select id="pStatus" aria-label="Which calendars">
+        <option value="all">Final and draft</option>
+        <option value="final">Final only</option>
+      </select>
+      <span class="grow"></span>
+      <span class="stat" id="count"></span>
+      <button type="button" id="printBtn" disabled>Print / Save as PDF</button>
+    </section>
+    <div class="cal-alert" id="alert" role="alert" hidden></div>
+    <div id="sheets"></div>
+  </div>
+</main>
+<script src="/assets/app.js"></script>
+<script src="/tools/chapel-calendar/calendar-core.js"></script>
+<script src="/tools/chapel-calendar/calendar-sheet.js"></script>
+<script src="/tools/chapel-calendar/print.js"></script>
+</body>
+</html>

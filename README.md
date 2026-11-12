@@ -6,7 +6,9 @@ A small internal website for Program Services staff. Each person signs in with t
 |---|---|
 | Supervisor | Everything, plus **Manage Team** (add staff, reset passwords, turn accounts off) and the Shortcut Ideas inbox |
 | Social Service Caseworker | **Certificates of Completion** (paste a class roster, print one certificate per person), Shortcut Ideas |
-| Chaplain | **Chapel & Classroom Calendar** (placeholder for now), Shortcut Ideas |
+| Chaplain | **Chapel Calendar** (build and print their own facility's monthly calendar), Shortcut Ideas |
+
+Supervisors also get **Chapel Calendars**: every facility's calendar by month, sortable by facility and month, with "print all for this month". Supervisors can view and print but not change a chaplain's calendar.
 
 ## Run it on your computer
 
@@ -30,6 +32,26 @@ Run the tests with `node --test`.
 The accounts database is a file on the persistent disk mounted at `/var/data`. Persistent disks need a paid web service plan (the blueprint uses `starter`). Without the disk, accounts would vanish on every deploy.
 
 Each push to the connected branch redeploys automatically.
+
+## Demo accounts (to see each role's side)
+
+Set one environment variable in Render: `DEMO_PASSWORD` (example: `ADOCprograms1!`, at least 12 characters). On the next start the portal creates three accounts that all use that password and fills the chapel calendar with sample data:
+
+- `supervisor@doc.alabama.gov`
+- `caseworker@doc.alabama.gov`
+- `chaplain@doc.alabama.gov` (Kilby Correctional Facility)
+
+Demo accounts only see demo data, and real accounts never see it. **Delete `DEMO_PASSWORD` from Render to switch the demo accounts off**: they are deactivated, their sessions end, and the sample calendars are removed. Do not leave a shared password active once real staff are using the site. The password is never stored in the repository.
+
+## Chapel Calendar
+
+- Each chaplain account belongs to one facility (set in **Manage Team**). Chaplains only see and edit their own facility.
+- Events can repeat daily, weekly, every other week, or monthly (for example the second Tuesday). Changing or deleting a repeating event can apply to just that day or to that day and all following.
+- Every group name a chaplain types (Kairos, Celebrate Recovery...) is saved to that facility's dropdown along with its usual type, times and room.
+- A month is a Draft until the chaplain marks it Final. Editing a Final month puts it back to Draft.
+- The calendar prints as one US Letter landscape page from the browser (Print / Save as PDF).
+- Holiday labels (and the automatic "Chapel Closed" suggestions) come from a built-in list of US federal holidays. Check them against ADOC's actual schedule each year.
+- Facility names come from `lib/facilities.js` plus any name typed in Manage Team. Edit that list if a name should read differently on the printed header.
 
 ## Adding a new shortcut
 

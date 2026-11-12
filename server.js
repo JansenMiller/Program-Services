@@ -7,6 +7,8 @@ const zlib = require('zlib');
 const db = require('./lib/db');
 const auth = require('./lib/auth');
 const { ROLES, toolsFor, rolesForPath } = require('./lib/tools');
+const calendar = require('./lib/calendar');
+const demo = require('./lib/demo');
 
 const PORT = Number(process.env.PORT) || 3000;
 const PROD = process.env.NODE_ENV === 'production';
@@ -72,9 +74,9 @@ function ipThrottled(ip) {
 }
 setInterval(() => { const t = Date.now(); for (const [k, v] of ipHits) if (v.reset < t) ipHits.delete(k); auth.purgeSessions(); }, 10 * 60 * 1000).unref();
 
-const publicUser = (u) => ({ id: u.id, email: u.email, name: u.name, role: u.role, mustChange: !!u.mustChange });
-const listUsers = () => db.prepare('SELECT id,email,name,role,active,must_change,last_login,created_at FROM users ORDER BY name COLLATE NOCASE').all()
-  .map((u) => ({ id: u.id, email: u.email, name: u.name, role: u.role, active: !!u.active, mustChange: !!u.must_change, lastLogin: u.last_login, createdAt: u.created_at }));
+const publicUser = (u) => ({ id: u.id, email: u.email, name: u.name, role: u.role, mustChange: !!u.mustChange, facility: u.facility || '', demo: !!u.demo });
+const listUsers = () => db.prepare('SELECT id,email,name,role,facility,demo,active,must_change,last_login,created_at FROM users ORDER BY name COLLATE NOCASE').all()
+  .map((u) => ({ id: u.id, email: u.email, name: u.name, role: u.role, facility: u.facility || '', demo: !!u.demo, active: !!u.active, mustChange: !!u.must_change, lastLogin: u.last_login, createdAt: u.created_at }));
 const activeSupervisors = () => db.prepare("SELECT COUNT(*) c FROM users WHERE role='supervisor' AND active=1").get().c;
 
 // ---------- API ----------
@@ -110,7 +112,7 @@ async function api(req, res, p, sess, ip) {
   }
 
   if (p === '/api/me' && m === 'GET') {
-    return json(res, 200, { user: publicUser(u), csrf: sess.csrf, tools: toolsFor(u.role).map(({ roles, ...t }) => t) });
+    return json(res, 200, { user: publicUser(u), csrf: sess.csrf, tools: toolsFor(u.role).map(({ roles, variants, ...t }) => t) });
   }
   if (p === '/api/logout' && m === 'POST') {
     const tok = auth.parseCookies(req.headers.cookie).sid; auth.destroySession(tok); clearSessionCookie(res);
@@ -133,6 +135,9 @@ async function api(req, res, p, sess, ip) {
     audit(u.email, 'password_changed', null, ip);
     return json(res, 200, { ok: true });
   }
+
+  // ----- chapel calendars and facility list -----
+  if (await calendar.handle({ req, res, p, sess, ip, json, readJson, audit })) return;
 
   // ----- shortcut ideas (any signed-in role) -----
   if (p === '/api/ideas' && m === 'GET') {
@@ -158,17 +163,19 @@ async function api(req, res, p, sess, ip) {
     if (p === '/api/admin/users' && m === 'POST') {
       const b = await readJson(req);
       const email = cleanText(b.email, 200).toLowerCase(); const name = cleanText(b.name, 80); const role = b.role;
+      const facility = role === 'supervisor' ? '' : cleanText(b.facility, 80);
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(res, 400, { error: 'Enter a valid email address.' });
       if (!name) return json(res, 400, { error: 'Enter the person\'s name.' });
       if (!ROLES.includes(role)) return json(res, 400, { error: 'Choose a role.' });
+      if (role === 'chaplain' && !facility) return json(res, 400, { error: 'Choose the chaplain\'s facility.' });
       if (db.prepare('SELECT 1 FROM users WHERE email=?').get(email)) return json(res, 409, { error: 'An account with that email already exists.' });
       const temp = auth.tempPassword();
-      db.prepare('INSERT INTO users (email,name,role,password_hash,must_change,created_at) VALUES (?,?,?,?,1,?)').run(email, name, role, await auth.hashPassword(temp), Date.now());
-      audit(u.email, 'user_created', `${email} (${role})`, ip);
+      db.prepare('INSERT INTO users (email,name,role,facility,password_hash,must_change,created_at) VALUES (?,?,?,?,?,1,?)').run(email, name, role, facility, await auth.hashPassword(temp), Date.now());
+      audit(u.email, 'user_created', `${email} (${role}${facility ? ', ' + facility : ''})`, ip);
       return json(res, 201, { ok: true, email, tempPassword: temp });
     }
     let mm;
-    if ((mm = p.match(/^\/api\/admin\/users\/(\d+)\/(reset|active|role)$/)) && m === 'POST') {
+    if ((mm = p.match(/^\/api\/admin\/users\/(\d+)\/(reset|active|role|facility)$/)) && m === 'POST') {
       const id = Number(mm[1]); const action = mm[2];
       const target = db.prepare('SELECT * FROM users WHERE id=?').get(id);
       if (!target) return json(res, 404, { error: 'User not found.' });
@@ -189,11 +196,19 @@ async function api(req, res, p, sess, ip) {
         audit(u.email, on ? 'user_enabled' : 'user_disabled', target.email, ip);
         return json(res, 200, { ok: true });
       }
+      if (action === 'facility') {
+        const fac = cleanText(b.facility, 80);
+        if (target.role === 'chaplain' && !fac) return json(res, 400, { error: 'A chaplain needs a facility.' });
+        db.prepare('UPDATE users SET facility=? WHERE id=?').run(target.role === 'supervisor' ? '' : fac, id);
+        audit(u.email, 'user_facility', `${target.email} -> ${fac}`, ip);
+        return json(res, 200, { ok: true });
+      }
       if (action === 'role') {
         if (!ROLES.includes(b.role)) return json(res, 400, { error: 'Choose a role.' });
         if (id === u.id) return json(res, 400, { error: 'You cannot change your own role.' });
         if (target.role === 'supervisor' && b.role !== 'supervisor' && target.active && activeSupervisors() <= 1) return json(res, 400, { error: 'At least one supervisor must stay active.' });
-        db.prepare('UPDATE users SET role=? WHERE id=?').run(b.role, id);
+        if (b.role === 'chaplain' && !target.facility) return json(res, 400, { error: 'Set a facility first, then make this person a chaplain.' });
+        db.prepare('UPDATE users SET role=?, facility=CASE WHEN ?=\'supervisor\' THEN \'\' ELSE facility END WHERE id=?').run(b.role, b.role, id);
         audit(u.email, 'user_role', `${target.email} -> ${b.role}`, ip);
         return json(res, 200, { ok: true });
       }
@@ -304,5 +319,6 @@ server.headersTimeout = 15000;
   } else if (count === 0) {
     console.warn('No users exist. Set ADMIN_EMAIL and ADMIN_PASSWORD, or run: node scripts/create-user.js');
   }
+  await demo.sync(process.env.DEMO_PASSWORD);
   server.listen(PORT, () => console.log(`ADOC staff portal listening on ${PORT}${PROD ? ' (production)' : ''}`));
 })();

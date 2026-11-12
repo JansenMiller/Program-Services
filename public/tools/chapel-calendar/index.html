@@ -6,27 +6,143 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#4F4F40">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<title>Chapel &amp; Classroom Calendar &middot; ADOC Staff Portal</title>
+<title>Chapel Calendar &middot; ADOC Staff Portal</title>
 <link rel="stylesheet" href="/assets/brand.css">
+<link rel="stylesheet" href="/tools/chapel-calendar/calendar.css">
 </head>
 <body>
 <header id="site-header" class="site"></header>
 <section class="hero compact">
   <div class="in">
-    <a class="back" href="/">&larr; Portal home</a>
-    <h1>Chapel &amp; classroom calendar</h1>
-    <p class="lead">Build and print the calendars your facility runs on.</p>
+    <a class="back" id="backLink" href="/">&larr; Portal home</a>
+    <h1 id="heroTitle">Chapel calendar</h1>
+    <p class="lead" id="heroLead">Click any day to add a service or class. Click an event to change it.</p>
   </div>
 </section>
 <main class="page">
   <div class="lift">
-    <section class="panel rise">
-      <h2>Coming soon</h2>
-      <p>This tool is being designed with chaplains. To help shape it, tell Program Services how you build your calendar today on the <a href="/ideas.html">Shortcut Ideas</a> page.</p>
+    <section class="panel rise cal-tools" id="tools" aria-label="Calendar controls">
+      <button type="button" class="secondary nav-btn" id="prev" aria-label="Previous month">&larr;</button>
+      <select id="monthSel" aria-label="Month"></select>
+      <select id="yearSel" aria-label="Year"></select>
+      <button type="button" class="secondary nav-btn" id="next" aria-label="Next month">&rarr;</button>
+      <button type="button" class="secondary" id="todayBtn">Today</button>
+      <select id="facSel" aria-label="Facility" hidden></select>
+      <span class="grow"></span>
+      <span class="viewonly" id="viewonly" hidden>View only</span>
+      <span id="status" class="badge b-wait" hidden>Draft</span>
+      <button type="button" id="addBtn" hidden>+ Add event</button>
+      <button type="button" class="secondary" id="printBtn">Print / Save as PDF</button>
+      <button type="button" class="secondary" id="finalBtn" hidden>Mark as final</button>
     </section>
+
+    <div class="cal-alert" id="alert" role="alert" hidden></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <div class="sheet-wrap"><div class="sheet-box" id="box"></div></div>
+
+    <section class="panel rise stack-gap" id="meta" hidden style="margin-top:20px">
+      <h2>Notes and sign-off</h2>
+      <p class="sub">These print at the bottom of the calendar. Changes save when you click away.</p>
+      <div class="meta-grid">
+        <div><label for="note">Note for this month</label><textarea id="note" maxlength="600" rows="3" placeholder="Example: Volunteers must arrive 15 minutes early. Call-outs may change this schedule."></textarea></div>
+        <div><label for="chaplain">Chaplain name</label><input id="chaplain" maxlength="80" autocomplete="off"></div>
+        <div><label for="warden">Warden name</label><input id="warden" maxlength="80" autocomplete="off" placeholder="Remembered for next month"></div>
+      </div>
+    </section>
+
+    <p class="tip no-print" id="tip">Tip: &ldquo;Print / Save as PDF&rdquo; makes a one-page landscape calendar. To email it, choose Save as PDF in the print window. If the green header prints white, turn on &ldquo;Background graphics&rdquo;.</p>
   </div>
 </main>
+
+<dialog class="evd" id="dlg" aria-labelledby="dlgTitle">
+  <form id="ef" novalidate>
+    <div class="evd-head">
+      <div class="eyebrow" id="dlgEyebrow">New event</div>
+      <h2 id="dlgTitle">Add to calendar</h2>
+    </div>
+    <div class="evd-body">
+      <label for="name">Group or event name</label>
+      <div class="combo">
+        <input id="name" name="name" maxlength="80" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="comboList" aria-autocomplete="list" placeholder="Pick a saved group or type a new one" required>
+        <button type="button" class="plain combo-btn" id="comboBtn" aria-label="Show saved groups" tabindex="-1"></button>
+        <div class="combo-list" id="comboList" role="listbox" aria-label="Saved groups" hidden></div>
+      </div>
+      <p class="f-hint">New names are saved to your list automatically, so you only type them once.</p>
+
+      <label>Type</label>
+      <div class="seg" role="radiogroup" aria-label="Type of event">
+        <label class="s-service"><input type="radio" name="kind" value="service" checked><span>Service</span></label>
+        <label class="s-study"><input type="radio" name="kind" value="study"><span>Class / study</span></label>
+        <label class="s-special"><input type="radio" name="kind" value="special"><span>Special event</span></label>
+        <label class="s-closed"><input type="radio" name="kind" value="closed"><span>Chapel closed</span></label>
+      </div>
+
+      <label for="detail">Details <span style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label>
+      <input id="detail" name="detail" maxlength="80" autocomplete="off" placeholder="Topic, leader, or room">
+
+      <div class="f-row">
+        <div><label for="date">Date</label><input id="date" name="date" type="date" required></div>
+        <div><label for="location">Location <span style="text-transform:none;letter-spacing:0;font-weight:400">(optional)</span></label><input id="location" name="location" maxlength="60" list="locList" autocomplete="off" placeholder="Chapel, Classroom 2..."><datalist id="locList"></datalist></div>
+      </div>
+
+      <div id="timeBox">
+        <label class="f-check"><input type="checkbox" id="allDay"> All day (no start time)</label>
+        <div class="f-row" id="timeRow">
+          <div><label for="start">Starts</label><input id="start" name="start" type="time" step="300"></div>
+          <div><label for="end">Ends</label><input id="end" name="end" type="time" step="300"></div>
+        </div>
+      </div>
+
+      <fieldset class="scope" id="scopeBox" hidden>
+        <legend>This event repeats. Apply changes to</legend>
+        <label><input type="radio" name="scope" value="one" checked> This event only</label>
+        <label><input type="radio" name="scope" value="following"> This and all following events</label>
+      </fieldset>
+
+      <div id="repeatBox">
+        <label for="repFreq">Repeat</label>
+        <select id="repFreq">
+          <option value="none">Does not repeat</option>
+          <option value="daily">Every day</option>
+          <option value="weekly">Every week</option>
+          <option value="biweekly">Every other week</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <div id="repMore" hidden>
+          <div id="wdRow" hidden>
+            <label>On these days</label>
+            <div class="wds" id="wds" role="group" aria-label="Days of the week"></div>
+          </div>
+          <div id="nthRow" hidden>
+            <label for="repNth">Which day of the month</label>
+            <select id="repNth"></select>
+          </div>
+          <label for="until">Repeat until</label>
+          <input id="until" type="date">
+          <div class="quick" id="quick">
+            <button type="button" data-q="month">This month</button>
+            <button type="button" data-q="3">Through 3 months</button>
+            <button type="button" data-q="6">Through 6 months</button>
+            <button type="button" data-q="year">End of year</button>
+          </div>
+          <div class="preview" id="preview" aria-live="polite"></div>
+        </div>
+      </div>
+      <div class="msg" id="dlgMsg" role="alert"></div>
+    </div>
+    <div class="evd-foot">
+      <button type="button" class="danger" id="delBtn" hidden>Delete</button>
+      <span class="grow"></span>
+      <button type="button" class="secondary" id="cancelBtn">Cancel</button>
+      <button type="submit" id="saveBtn">Save</button>
+    </div>
+  </form>
+</dialog>
+
 <script src="/assets/app.js"></script>
-<script src="/tools/chapel-calendar/page.js"></script>
+<script src="/tools/chapel-calendar/calendar-core.js"></script>
+<script src="/tools/chapel-calendar/calendar-sheet.js"></script>
+<script src="/tools/chapel-calendar/calendar.js"></script>
 </body>
 </html>
